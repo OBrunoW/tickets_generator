@@ -32,7 +32,8 @@ public class ConsolidatedAdapterList extends RecyclerView.Adapter<ConsolidatedAd
     private OnClickListener onClickListener = null;
     private static final String namePgPix = "Pix";
     private static final String namePgMoney = "Dinheiro";
-    private static final String namePgCard = "Cartão";
+    private static final String namePgCardCredit = "Crédito";
+    private static final String namePgCardDebit = "Débito";
 
 
     public ConsolidatedAdapterList(Context context, List<Consolidated> list) {
@@ -74,7 +75,11 @@ public class ConsolidatedAdapterList extends RecyclerView.Adapter<ConsolidatedAd
                 holder.icon.setImageDrawable(context.getDrawable(R.drawable.round_pix_24));
                 break;
 
-            case namePgCard :
+            case namePgCardCredit :
+                holder.icon.setImageDrawable(context.getDrawable(R.drawable.round_payment_24));
+                break;
+
+            case namePgCardDebit :
                 holder.icon.setImageDrawable(context.getDrawable(R.drawable.round_payment_24));
                 break;
 

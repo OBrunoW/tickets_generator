@@ -14,6 +14,8 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -21,6 +23,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -57,9 +60,8 @@ public class MainMenuFragment extends Fragment {
     private List<Product> products;
     private List<Consolidated> consolidateds;
     private RecyclerView recyclerView;
-    private boolean buttonState = true;
+    private final boolean buttonState = true;
     private TextView performance;
-    private ExtendedFloatingActionButton eFab;
 
     private static final String TAG_FRAGMENT = "fragment_main_menu";
 
@@ -96,22 +98,25 @@ public class MainMenuFragment extends Fragment {
         recyclerView = view.findViewById(R.id.list_consolidated);
         recyclerView.setAdapter(productAdapterList);
 
-        CardView cardNewProduct = view.findViewById(R.id.card_add_product);
+        Button cardNewProduct = view.findViewById(R.id.card_new_product);
         CardView cardConsolidated = view.findViewById(R.id.card_consolidated);
         CardView cardSill = view.findViewById(R.id.card_sill);
+        ImageView imageSettings = view.findViewById(R.id.settings);
 
+        RelativeLayout relativeLay = view.findViewById(R.id.relative_bar);
         RelativeLayout layoutAll = view.findViewById(R.id.layout_all_consolidated);
         layoutAll.setVisibility(View.GONE);
 
 
         performance = view.findViewById(R.id.result_consolidated);
-        eFab = view.findViewById(R.id.print_consolidated);
 
 
         cardNewProduct.setOnClickListener(view1 ->{
             newProduct();
             recyclerView.setAdapter(productAdapterList);
             layoutAll.setVisibility(View.GONE);
+            relativeLay.setVisibility(View.VISIBLE);
+            recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));
         });
 
         cardConsolidated.setOnClickListener(view1 ->{
@@ -125,17 +130,20 @@ public class MainMenuFragment extends Fragment {
                 performance.setText(value);
             }
 
-
             recyclerView.setAdapter(consolidatedAdapterList);
             layoutAll.setVisibility(View.VISIBLE);
+            relativeLay.setVisibility(View.GONE);
+            recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 1));
         });
 
         cardSill.setOnClickListener(view12 ->{
             recyclerView.setAdapter(productAdapterList);
             layoutAll.setVisibility(View.GONE);
+            relativeLay.setVisibility(View.VISIBLE);
+            recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));
         });
 
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));
 
 
         productAdapterList.setOnClickListener(new ProductAdapterList.OnClickListener() {
@@ -157,6 +165,9 @@ public class MainMenuFragment extends Fragment {
 
             }
         });
+
+        performance.setOnClickListener(view13 -> fragmentManager.beginTransaction().replace
+                (R.id.content_fragment, new DetailFragment()).addToBackStack(null).commit());
 
 
         return view;
@@ -182,14 +193,6 @@ public class MainMenuFragment extends Fragment {
 
         save.setOnClickListener(view -> {
 
-            NumberFormat format = NumberFormat.getInstance(Locale.getDefault());
-            Number number = null;
-            try {
-                number = format.parse(price.getText().toString());
-            } catch (ParseException e) {
-                throw new RuntimeException(e);
-            }
-
             boolean stateName;
             boolean statePrice;
 
@@ -203,16 +206,25 @@ public class MainMenuFragment extends Fragment {
                 stateName = true;
             }
 
-            if(TextUtils.isEmpty(price.getText())) statePrice = false;
-            else statePrice = true;
+            for(Product obj : new ProductController(getContext()).getAll()) {
+                if (Objects.equals(obj.getName(), name.getText().toString())) {
+                    layout.setError("Nome já existe");
+                    layout.setErrorEnabled(true);
+                    stateName = false;
+                } else {
+                    layout.setErrorEnabled(false);
+                    stateName = true;
+                }
+            }
 
+            statePrice = !TextUtils.isEmpty(price.getText());
 
             if(stateName && statePrice) {
                 Product product = new Product();
                 product.setName(name.getText().toString());
-                product.setPrice(number.doubleValue());
-
+                product.setPrice(Double.parseDouble(price.getText().toString()));
                 product.setAmount(0);
+
                 new ProductController(getContext()).save(product);
 
                 products.add(product);
@@ -252,15 +264,16 @@ public class MainMenuFragment extends Fragment {
         final String[] pg = {null};
 
         ImageButton increment, decrement;
-        CardView pix, card, money;
+        LinearLayout pix, credit, debit, money;
         TextView result;
 
-        final int[] incrementValue = {0};
+        final int[] incrementValue = {1};
 
         increment = customLayout.findViewById(R.id.increment);
         decrement = customLayout.findViewById(R.id.decrement);
         pix = customLayout.findViewById(R.id.card_payment_pix);
-        card = customLayout.findViewById(R.id.card_payment_card);
+        credit = customLayout.findViewById(R.id.card_payment_card);
+        debit = customLayout.findViewById(R.id.card_payment_card_debit);
         money = customLayout.findViewById(R.id.card_payment_money);
         result = customLayout.findViewById(R.id.result);
         MaterialButton buttonPrint = customLayout.findViewById(R.id.button_print_ticket);
@@ -271,15 +284,44 @@ public class MainMenuFragment extends Fragment {
             if(incrementValue[0] >= 1) result.setText(String.valueOf(incrementValue[0]-- -1));
         });
 
-        pix.setOnClickListener(view -> pg[0] = "Pix");
-        card.setOnClickListener(view -> pg[0] = "Cartão");
-        money.setOnClickListener(view -> pg[0] = "Dinheiro");
+        pix.setBackground(getContext().getDrawable(R.drawable.shape_corner_radious));
+        pg[0] = "Pix";
+
+        pix.setOnClickListener(view -> {
+            pix.setBackground(getContext().getDrawable(R.drawable.shape_corner_radious));
+            credit.setBackground(getContext().getDrawable(R.drawable.shape_corner_radious_selected));
+            debit.setBackground(getContext().getDrawable(R.drawable.shape_corner_radious_selected));
+            money.setBackground(getContext().getDrawable(R.drawable.shape_corner_radious_selected));
+            pg[0] = "Pix";
+        });
+        credit.setOnClickListener(view -> {
+            pix.setBackground(getContext().getDrawable(R.drawable.shape_corner_radious_selected));
+            credit.setBackground(getContext().getDrawable(R.drawable.shape_corner_radious));
+            debit.setBackground(getContext().getDrawable(R.drawable.shape_corner_radious_selected));
+            money.setBackground(getContext().getDrawable(R.drawable.shape_corner_radious_selected));
+            pg[0] = "Crédito";
+        });
+        debit.setOnClickListener(view -> {
+            pix.setBackground(getContext().getDrawable(R.drawable.shape_corner_radious_selected));
+            credit.setBackground(getContext().getDrawable(R.drawable.shape_corner_radious_selected));
+            debit.setBackground(getContext().getDrawable(R.drawable.shape_corner_radious));
+            money.setBackground(getContext().getDrawable(R.drawable.shape_corner_radious_selected));
+            pg[0] = "Débito";
+        });
+        money.setOnClickListener(view -> {
+            pix.setBackground(getContext().getDrawable(R.drawable.shape_corner_radious_selected));
+            credit.setBackground(getContext().getDrawable(R.drawable.shape_corner_radious_selected));
+            debit.setBackground(getContext().getDrawable(R.drawable.shape_corner_radious_selected));
+            money.setBackground(getContext().getDrawable(R.drawable.shape_corner_radious));
+            pg[0] = "Dinheiro";
+        });
 
         buttonPrint.setOnClickListener(view -> {
 
-            e1.connectPrinter();
-
             for(int i = 0; i < incrementValue[0]; i++) {
+
+                e1.connectPrinter();
+
                 Consolidated consolidated = new Consolidated();
 
                 consolidated.setName(obj.getName());
@@ -294,11 +336,15 @@ public class MainMenuFragment extends Fragment {
 
                 consolidatedAdapterList.notifyDataSetChanged();
 
-                settings.printText("Validade " + getDateTimeNow() + "\n", true, 12, "Esquerda");
+                String[] date = getDateTimeNow().split(" ");
+
+                settings.printText("Valido até " + date[0] + "\n", true, 12, "Esquerda");
                 settings.printText(obj.getName(), true, 18, "Esquerda");
                 settings.jumpLine();
                 settings.cutPaper();
             }
+
+            e1.printerStopElgin();
 
             dialog.dismiss();
 

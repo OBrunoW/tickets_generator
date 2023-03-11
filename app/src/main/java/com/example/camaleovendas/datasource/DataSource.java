@@ -245,4 +245,54 @@ public class DataSource extends SQLiteOpenHelper {
         return retorno;
     }
 
+    public List<Consolidated> getConsolidatedsByProdCode(String name) {
+
+        Consolidated objProduct;
+
+        db = this.getReadableDatabase();
+
+        List<Consolidated> retorno = new ArrayList<>();
+
+        String sql = "SELECT * FROM " + ConsolidatedDataModel.getTable()
+                + " WHERE name = ?";
+
+        cursor = db.rawQuery(sql, new String[]{name});
+
+        if (cursor.moveToFirst()) {
+
+            do {
+
+                objProduct = new Consolidated();
+
+                objProduct.setId(cursor.getInt(Integer.parseInt(String.valueOf
+                        (cursor.getColumnIndex(ConsolidatedDataModel.getId())))));
+
+                objProduct.setAmount(cursor.getInt(Integer.parseInt(String.valueOf
+                        (cursor.getColumnIndex(ConsolidatedDataModel.getAmount())))));
+
+                objProduct.setName(cursor.getString(Integer.parseInt(String.valueOf
+                        (cursor.getColumnIndex(ConsolidatedDataModel.getName())))));
+
+                objProduct.setPrice(cursor.getDouble(Integer.parseInt(String.valueOf
+                        (cursor.getColumnIndex(ConsolidatedDataModel.getPrice())))));
+
+                objProduct.setPg(cursor.getString(Integer.parseInt(String.valueOf
+                        (cursor.getColumnIndex(ConsolidatedDataModel.getPg())))));
+
+                objProduct.setDateTime(cursor.getString(Integer.parseInt(String.valueOf
+                        (cursor.getColumnIndex(ConsolidatedDataModel.getDateTime())))));
+
+                retorno.add(objProduct);
+
+            } while (cursor.moveToNext());
+
+        }
+
+        cursor.close();
+
+        db.close();
+
+        return retorno;
+    }
+
 }

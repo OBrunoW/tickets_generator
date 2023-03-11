@@ -17,6 +17,8 @@ public class SettingPrinterE1 {
     public static final int IP = 3;
     public static final String TYPE_IP = "";
     public static final String TYPE_USB = "usb";
+    public static final String IP_GERTEC = "192.168.0.32";
+    public static final String IP_I9 = "192.168.0.33";
 
 
     public Context _context;
@@ -26,7 +28,7 @@ public class SettingPrinterE1 {
     }
     public int connectPrinter() {
         try {
-            return Termica.AbreConexaoImpressora(USB, MODEL_PRINTER_I9, TYPE_USB, 0);
+            return Termica.AbreConexaoImpressora(IP, MODEL_PRINTER_I9, IP_GERTEC, 9100);
         } catch (Exception e) {
             return -1;
         }

@@ -59,6 +59,10 @@ public class ElginI9Settings {
         elgin.printTextElgin(mapValues);
     }
 
+    public void closeConnection() {
+        elgin.printerStopElgin();
+    }
+
 
 
 }
