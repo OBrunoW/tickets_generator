@@ -2,12 +2,9 @@ package com.example.camaleovendas.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -15,10 +12,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.camaleovendas.R;
 import com.example.camaleovendas.controller.ConsolidatedController;
+import com.example.camaleovendas.controller.ProductController;
 import com.example.camaleovendas.model.Consolidated;
 import com.example.camaleovendas.model.Product;
+import com.example.camaleovendas.util.Util;
 
 import java.text.NumberFormat;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
@@ -26,14 +26,18 @@ import java.util.Objects;
 
 public class ConsolidatedDetailsAdapterList extends RecyclerView.Adapter<ConsolidatedDetailsAdapterList.VewHolder> {
 
-    public List<Product> list;
+    private final List<Consolidated> consolidateds;
+    private final List<String> names;
     private Context context;
-    private ConsolidatedController controller;
 
 
-    public ConsolidatedDetailsAdapterList(Context context, List<Product> list) {
+    public ConsolidatedDetailsAdapterList(Context context) {
         this.context = context;
-        this.list = list;
+        this.consolidateds = new ConsolidatedController(context).getAll();
+        this.names = new ArrayList<>();
+
+        for(Consolidated obj : consolidateds)
+            if(!names.contains(obj.getName())) names.add(obj.getName());
     }
 
     @NonNull
@@ -43,7 +47,6 @@ public class ConsolidatedDetailsAdapterList extends RecyclerView.Adapter<Consoli
         LayoutInflater inflater = LayoutInflater.from(context);
 
         View contactView = inflater.inflate(R.layout.adapter_consolidated_detail, parent, false);
-        controller = new ConsolidatedController(context);
 
         return new VewHolder(contactView);
     }
@@ -51,8 +54,6 @@ public class ConsolidatedDetailsAdapterList extends RecyclerView.Adapter<Consoli
     @SuppressLint({"SetTextI18n", "UseCompatLoadingForDrawables"})
     @Override
     public void onBindViewHolder(@NonNull VewHolder holder, int position) {
-
-        Locale ptBr = new Locale("pt", "BR");
 
         int countPix = 0;
         int countCredit = 0;
@@ -64,31 +65,35 @@ public class ConsolidatedDetailsAdapterList extends RecyclerView.Adapter<Consoli
         double debit = 0;
         double money = 0;
 
+        String name = names.get(position);
+        Product product = new ProductController(context).getProductName(name);
 
-        Product product = list.get(position);
+        if(product.getName() != null) holder.nameStatus.setVisibility(View.GONE);
+        else holder.nameStatus.setVisibility(View.VISIBLE);
 
-        List<Consolidated> consolidateds =
-                controller.getConsolidatedsByProdCode(product.getName());
 
-        holder.prodName.setText(product.getName());
+        holder.prodName.setText(name);
 
         for(Consolidated obj : consolidateds) {
 
-            if(Objects.equals(obj.getPg(), "Pix")){
-                countPix++;
-                pix += obj.getPrice();
-            }
-            if(Objects.equals(obj.getPg(), "Crédito")){
-                countCredit++;
-                credit += obj.getPrice();
-            }
-            if(Objects.equals(obj.getPg(), "Débito")){
-                countDebit++;
-                debit += obj.getPrice();
-            }
-            if(Objects.equals(obj.getPg(), "Dinheiro")){
-                countMoney++;
-                money += obj.getPrice();
+            if(Objects.equals(obj.getName(), name)) {
+
+                if (Objects.equals(obj.getPg(), Util.NAME_PIX)) {
+                    countPix++;
+                    pix += obj.getPrice();
+                }
+                if (Objects.equals(obj.getPg(), Util.NAME_CREDIT)) {
+                    countCredit++;
+                    credit += obj.getPrice();
+                }
+                if (Objects.equals(obj.getPg(), Util.NAME_DEBIT)) {
+                    countDebit++;
+                    debit += obj.getPrice();
+                }
+                if (Objects.equals(obj.getPg(), Util.NAME_MONEY)) {
+                    countMoney++;
+                    money += obj.getPrice();
+                }
             }
         }
 
@@ -100,24 +105,25 @@ public class ConsolidatedDetailsAdapterList extends RecyclerView.Adapter<Consoli
         int resultUn = countPix + countCredit + countDebit + countMoney;
         holder.unAll.setText(resultUn + " un.");
 
-        holder.pixPrice.setText(NumberFormat.getCurrencyInstance(ptBr).format(pix));
-        holder.creditPrice.setText(NumberFormat.getCurrencyInstance(ptBr).format(credit));
-        holder.debitPrice.setText(NumberFormat.getCurrencyInstance(ptBr).format(debit));
-        holder.moneyPrice.setText(NumberFormat.getCurrencyInstance(ptBr).format(money));
-        holder.priceAll.setText(NumberFormat
-                .getCurrencyInstance(ptBr)
-                .format(money + debit + credit + pix));
+        holder.pixPrice.setText(NumberFormat.getCurrencyInstance(Util.ptBr()).format(pix));
+        holder.creditPrice.setText(NumberFormat.getCurrencyInstance(Util.ptBr()).format(credit));
+        holder.debitPrice.setText(NumberFormat.getCurrencyInstance(Util.ptBr()).format(debit));
+        holder.moneyPrice.setText(NumberFormat.getCurrencyInstance(Util.ptBr()).format(money));
+
+        double resultPrice = money + debit + credit + pix;
+        holder.priceAll.setText(NumberFormat.getCurrencyInstance(Util.ptBr()).format(resultPrice));
 
     }
 
     @Override
     public int getItemCount() {
-        return list.size();
+        return names.size();
     }
 
     public static class VewHolder extends RecyclerView.ViewHolder {
 
         private final TextView prodName;
+        private final TextView nameStatus;
         private final TextView pixUn;
         private final TextView creditUn;
         private final TextView debitUn;
@@ -134,6 +140,7 @@ public class ConsolidatedDetailsAdapterList extends RecyclerView.Adapter<Consoli
 
 
             prodName = itemView.findViewById(R.id.adapter_detail_name);
+            nameStatus = itemView.findViewById(R.id.adapter_detail_name_status);
             pixUn = itemView.findViewById(R.id.detail_un_pix);
             creditUn = itemView.findViewById(R.id.detail_un_credit);
             debitUn = itemView.findViewById(R.id.detail_un_debit);

@@ -21,6 +21,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -36,6 +37,7 @@ import com.example.camaleovendas.model.Consolidated;
 import com.example.camaleovendas.model.Product;
 import com.example.camaleovendas.printer.ElginI9Settings;
 import com.example.camaleovendas.printer.SettingPrinterE1;
+import com.example.camaleovendas.util.Util;
 import com.example.camaleovendas.view.MainActivity;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
@@ -284,36 +286,36 @@ public class MainMenuFragment extends Fragment {
             if(incrementValue[0] >= 1) result.setText(String.valueOf(incrementValue[0]-- -1));
         });
 
-        pix.setBackground(getContext().getDrawable(R.drawable.shape_corner_radious));
-        pg[0] = "Pix";
+        pix.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.shape_corner_radious));
+        pg[0] = Util.NAME_PIX;
 
         pix.setOnClickListener(view -> {
-            pix.setBackground(getContext().getDrawable(R.drawable.shape_corner_radious));
-            credit.setBackground(getContext().getDrawable(R.drawable.shape_corner_radious_selected));
-            debit.setBackground(getContext().getDrawable(R.drawable.shape_corner_radious_selected));
-            money.setBackground(getContext().getDrawable(R.drawable.shape_corner_radious_selected));
-            pg[0] = "Pix";
+            pix.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.shape_corner_radious));
+            credit.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.shape_corner_radious_selected));
+            debit.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.shape_corner_radious_selected));
+            money.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.shape_corner_radious_selected));
+            pg[0] = Util.NAME_PIX;
         });
         credit.setOnClickListener(view -> {
-            pix.setBackground(getContext().getDrawable(R.drawable.shape_corner_radious_selected));
-            credit.setBackground(getContext().getDrawable(R.drawable.shape_corner_radious));
-            debit.setBackground(getContext().getDrawable(R.drawable.shape_corner_radious_selected));
-            money.setBackground(getContext().getDrawable(R.drawable.shape_corner_radious_selected));
-            pg[0] = "Crédito";
+            pix.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.shape_corner_radious_selected));
+            credit.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.shape_corner_radious));
+            debit.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.shape_corner_radious_selected));
+            money.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.shape_corner_radious_selected));
+            pg[0] = Util.NAME_CREDIT;
         });
         debit.setOnClickListener(view -> {
-            pix.setBackground(getContext().getDrawable(R.drawable.shape_corner_radious_selected));
-            credit.setBackground(getContext().getDrawable(R.drawable.shape_corner_radious_selected));
-            debit.setBackground(getContext().getDrawable(R.drawable.shape_corner_radious));
-            money.setBackground(getContext().getDrawable(R.drawable.shape_corner_radious_selected));
-            pg[0] = "Débito";
+            pix.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.shape_corner_radious_selected));
+            credit.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.shape_corner_radious_selected));
+            debit.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.shape_corner_radious));
+            money.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.shape_corner_radious_selected));
+            pg[0] = Util.NAME_DEBIT;
         });
         money.setOnClickListener(view -> {
-            pix.setBackground(getContext().getDrawable(R.drawable.shape_corner_radious_selected));
-            credit.setBackground(getContext().getDrawable(R.drawable.shape_corner_radious_selected));
-            debit.setBackground(getContext().getDrawable(R.drawable.shape_corner_radious_selected));
-            money.setBackground(getContext().getDrawable(R.drawable.shape_corner_radious));
-            pg[0] = "Dinheiro";
+            pix.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.shape_corner_radious_selected));
+            credit.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.shape_corner_radious_selected));
+            debit.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.shape_corner_radious_selected));
+            money.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.shape_corner_radious));
+            pg[0] = Util.NAME_MONEY;
         });
 
         buttonPrint.setOnClickListener(view -> {

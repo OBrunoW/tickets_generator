@@ -5,9 +5,18 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 
 import java.io.ByteArrayOutputStream;
+import java.util.Locale;
 
 public class Util {
 
+    public static final String NAME_PIX = "Pix";
+    public static final String NAME_CREDIT = "Crédito";
+    public static final String NAME_DEBIT = "Débito";
+    public static final String NAME_MONEY = "Dinheiro";
+
+    public static Locale ptBr() {
+        return new Locale("pt", "BR");
+    }
     public static Bitmap setImageSizeColor(Bitmap bitmap, int width, int height) {
 
         try {

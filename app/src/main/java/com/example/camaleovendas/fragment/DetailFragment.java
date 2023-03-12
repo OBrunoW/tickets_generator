@@ -21,11 +21,7 @@ import java.util.Objects;
 
 public class DetailFragment extends Fragment {
 
-    private MainActivity mainActivity;
-
     private static final String TAG_FRAGMENT = "fragment_details";
-
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,17 +33,17 @@ public class DetailFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.dialog_custom_layout_form_consolidated_details, container, false);
 
-        mainActivity = (MainActivity) getActivity();
+        MainActivity mainActivity = (MainActivity) getActivity();
 
         assert mainActivity != null;
 
         Objects.requireNonNull(mainActivity.getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         mainActivity.getSupportActionBar().setDisplayShowTitleEnabled(true);
-        mainActivity.getSupportActionBar().setTitle("Detalhes Relatório");
+        mainActivity.getSupportActionBar().setHomeAsUpIndicator(R.drawable.round_arrow_back_ios_24);
+        mainActivity.getSupportActionBar().setTitle("Relatório de vendas");
 
-        List<Product> products = new ProductController(getContext()).getProduct();
-
-        ConsolidatedDetailsAdapterList consolidatedDetails = new ConsolidatedDetailsAdapterList(mainActivity, products);
+        ConsolidatedDetailsAdapterList consolidatedDetails
+                = new ConsolidatedDetailsAdapterList(mainActivity);
 
         RecyclerView recyclerView = view.findViewById(R.id.recycler_details);
         recyclerView.setAdapter(consolidatedDetails);

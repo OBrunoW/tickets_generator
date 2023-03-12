@@ -6,7 +6,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteCantOpenDatabaseException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
 import com.example.camaleovendas.datamodel.ConsolidatedDataModel;
 import com.example.camaleovendas.datamodel.ProductDataModel;
@@ -158,7 +157,7 @@ public class DataSource extends SQLiteOpenHelper {
         String sql = "SELECT * FROM " + ProductDataModel.getTable()
                 + " ORDER BY "
                 + ProductDataModel.getId()
-                + " COLLATE NOCASE DESC";
+                + " COLLATE NOCASE ASC";
 
         cursor = db.rawQuery(sql, null);
 
@@ -191,6 +190,44 @@ public class DataSource extends SQLiteOpenHelper {
         db.close();
 
         return retorno;
+    }
+
+    public Product getProductName(String name) {
+
+        Product objProduct = new Product();
+
+        db = this.getReadableDatabase();
+
+        String sql = "SELECT * FROM " + ProductDataModel.getTable()
+                + " WHERE name = ?";
+
+        cursor = db.rawQuery(sql, new String[]{name});
+
+        if (cursor.moveToFirst()) {
+
+            do {
+
+                objProduct.setId(cursor.getInt(Integer.parseInt(String.valueOf
+                        (cursor.getColumnIndex(ProductDataModel.getId())))));
+
+                objProduct.setAmount(cursor.getInt(Integer.parseInt(String.valueOf
+                        (cursor.getColumnIndex(ProductDataModel.getAmount())))));
+
+                objProduct.setName(cursor.getString(Integer.parseInt(String.valueOf
+                        (cursor.getColumnIndex(ProductDataModel.getName())))));
+
+                objProduct.setPrice(cursor.getDouble(Integer.parseInt(String.valueOf
+                        (cursor.getColumnIndex(ProductDataModel.getPrice())))));
+
+            } while (cursor.moveToNext());
+
+        }
+
+        cursor.close();
+
+        db.close();
+
+        return objProduct;
     }
 
     public List<Consolidated> getConsolidateds() {
@@ -245,7 +282,7 @@ public class DataSource extends SQLiteOpenHelper {
         return retorno;
     }
 
-    public List<Consolidated> getConsolidatedsByProdCode(String name) {
+    public List<Consolidated> getConsolidatedsByName(String name) {
 
         Consolidated objProduct;
 
