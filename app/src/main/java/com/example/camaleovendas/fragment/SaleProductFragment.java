@@ -2,7 +2,11 @@ package com.example.camaleovendas.fragment;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -14,18 +18,14 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.widget.Toolbar;
-import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.camaleovendas.R;
@@ -44,17 +44,10 @@ import com.google.android.material.floatingactionbutton.ExtendedFloatingActionBu
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
-import org.w3c.dom.Text;
-
-import java.text.NumberFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.List;
-import java.util.Locale;
 import java.util.Objects;
 
-public class MainMenuFragment extends Fragment {
+public class SaleProductFragment extends Fragment {
 
     private MainActivity mainActivity;
     private ProductAdapterList productAdapterList;
@@ -63,7 +56,6 @@ public class MainMenuFragment extends Fragment {
     private List<Consolidated> consolidateds;
     private RecyclerView recyclerView;
     private final boolean buttonState = true;
-    private TextView performance;
 
     private static final String TAG_FRAGMENT = "fragment_main_menu";
 
@@ -76,15 +68,15 @@ public class MainMenuFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fragment_main_menu, container, false);
+        View view = inflater.inflate(R.layout.fragment_sale_product, container, false);
 
         mainActivity = (MainActivity) getActivity();
 
         assert mainActivity != null;
 
-        Objects.requireNonNull(mainActivity.getSupportActionBar()).setTitle("Início");
+        Objects.requireNonNull(mainActivity.getSupportActionBar()).setTitle("Camaleões vendas");
         mainActivity.getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-        mainActivity.getSupportActionBar().setDisplayShowTitleEnabled(true);
+        mainActivity.getSupportActionBar().setElevation(0);
 
         ProductController productController = new ProductController(getContext());
         products = productController.getAll();
@@ -97,54 +89,16 @@ public class MainMenuFragment extends Fragment {
         productAdapterList = new ProductAdapterList(mainActivity, products);
         consolidatedAdapterList = new ConsolidatedAdapterList(mainActivity, consolidateds);
 
-        recyclerView = view.findViewById(R.id.list_consolidated);
+        recyclerView = view.findViewById(R.id.list_products);
         recyclerView.setAdapter(productAdapterList);
 
-        Button cardNewProduct = view.findViewById(R.id.card_new_product);
-        CardView cardConsolidated = view.findViewById(R.id.card_consolidated);
-        CardView cardSill = view.findViewById(R.id.card_sill);
-        ImageView imageSettings = view.findViewById(R.id.settings);
-
-        RelativeLayout relativeLay = view.findViewById(R.id.relative_bar);
-        RelativeLayout layoutAll = view.findViewById(R.id.layout_all_consolidated);
-        layoutAll.setVisibility(View.GONE);
-
-
-        performance = view.findViewById(R.id.result_consolidated);
-
+        ExtendedFloatingActionButton cardNewProduct = view.findViewById(R.id.card_new_product);
 
         cardNewProduct.setOnClickListener(view1 ->{
             newProduct();
-            recyclerView.setAdapter(productAdapterList);
-            layoutAll.setVisibility(View.GONE);
-            relativeLay.setVisibility(View.VISIBLE);
-            recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));
         });
 
-        cardConsolidated.setOnClickListener(view1 ->{
-
-            Locale ptBr = new Locale("pt", "BR");
-            double val = 0.0;
-
-            for(Consolidated obj : consolidateds) {
-
-                String value = NumberFormat.getCurrencyInstance(ptBr).format(val += obj.getPrice());
-                performance.setText(value);
-            }
-
-            recyclerView.setAdapter(consolidatedAdapterList);
-            layoutAll.setVisibility(View.VISIBLE);
-            relativeLay.setVisibility(View.GONE);
-            recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 1));
-        });
-
-        cardSill.setOnClickListener(view12 ->{
-            recyclerView.setAdapter(productAdapterList);
-            layoutAll.setVisibility(View.GONE);
-            relativeLay.setVisibility(View.VISIBLE);
-            recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));
-        });
-
+        recyclerView.setAdapter(productAdapterList);
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));
 
 
@@ -167,10 +121,6 @@ public class MainMenuFragment extends Fragment {
 
             }
         });
-
-        performance.setOnClickListener(view13 -> fragmentManager.beginTransaction().replace
-                (R.id.content_fragment, new DetailFragment()).addToBackStack(null).commit());
-
 
         return view;
     }
@@ -330,7 +280,7 @@ public class MainMenuFragment extends Fragment {
                 consolidated.setPg(pg[0]);
                 consolidated.setAmount(i);
                 consolidated.setPrice(obj.getPrice());
-                consolidated.setDateTime(getDateTimeNow());
+                consolidated.setDateTime(Util.getDateTimeNow());
 
                 new ConsolidatedController(getContext()).save(consolidated);
 
@@ -338,15 +288,55 @@ public class MainMenuFragment extends Fragment {
 
                 consolidatedAdapterList.notifyDataSetChanged();
 
-                String[] date = getDateTimeNow().split(" ");
+                /*
+                String[] date = Util.getDateTimeNow().split(" ");
 
                 settings.printText("Valido até " + date[0] + "\n", true, 12, "Esquerda");
                 settings.printText(obj.getName(), true, 18, "Esquerda");
                 settings.jumpLine();
                 settings.cutPaper();
+                 */
+
+                Bitmap mBitmapDraw = Bitmap.createBitmap(800, 400, Bitmap.Config.ARGB_8888);
+
+                Canvas mCanvasDraw = new Canvas(mBitmapDraw);
+
+                Paint paint = new Paint();
+                paint.setColor(getContext().getColor(R.color.color_coil_termic_printer));
+                mCanvasDraw.drawPaint(paint);
+
+                paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
+                paint.setTextAlign(Paint.Align.LEFT);
+                paint.setStyle(Paint.Style.FILL);
+                paint.setColor(Color.BLACK);
+                paint.setTextSize(36);
+
+                int xPos = 0;
+                int yPos = 36;
+
+                String[] date = Util.getDateTimeNow().split(" ");
+                mCanvasDraw.drawText("Válido até " + date[0], xPos, yPos, paint);
+
+                paint.setTextSize(96);
+                yPos += 125;
+
+                mCanvasDraw.drawText(obj.getName(), xPos, yPos, paint);
+
+                //xPos = getRight() - 250;
+                //yPos = 0;
+
+                /*if(bitmap != null) {
+                    Bitmap mBitmap = Util.setImageSizeColor(bitmap, 250, 250);
+                    mCanvasDraw.drawBitmap(Util.replaceColor(mBitmap), xPos, yPos, paint);
+                }
+
+                 */
+
+                e1.printImageElgin(mBitmapDraw);
+                settings.cutPaper();
             }
 
-            e1.printerStopElgin();
+            //e1.printerStopElgin();
 
             dialog.dismiss();
 
@@ -361,19 +351,5 @@ public class MainMenuFragment extends Fragment {
         dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
         dialog.getWindow().setGravity(Gravity.BOTTOM);
 
-    }
-
-    public static SimpleDateFormat setDateTimeFormat(String pattern) {
-        return new SimpleDateFormat(pattern);
-    }
-
-    public static String getDateTimeNow() {
-        String patternDate = "dd/MM/yyyy HH:mm:ss";
-        try {
-            Calendar calendar = Calendar.getInstance();
-            return setDateTimeFormat(patternDate).format(calendar.getTime());
-        } catch (Exception ignored) {
-        }
-        return "00/00/00000";
     }
 }

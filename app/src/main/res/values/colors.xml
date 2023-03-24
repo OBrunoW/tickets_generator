@@ -10,6 +10,9 @@
     <color name="camaleao_red">#860c11</color>
     <color name="camaleao_yellow">#edc04a</color>
     <color name="camaleao_green">#057335</color>
+    <color name="color_outlined_box">#4Da0a0a2</color>
+    <color name="color_outlined_icon">#CCa0a0a2</color>
+    <color name="color_coil_termic_printer">#fbfbe4</color>
 
 
 </resources>

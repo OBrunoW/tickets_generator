@@ -9,7 +9,8 @@
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/camaleao_red">
+        android:backgroundTint="@color/camaleao_red"
+        android:hapticFeedbackEnabled="true">
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar_fragment"
@@ -17,8 +18,9 @@
             android:layout_height="?attr/actionBarSize"
             android:paddingStart="6dp"
             android:paddingEnd="16dp"
-            app:titleCentered="true"
-            app:titleTextColor="@color/white"/>
+            app:titleCentered="false"
+            app:titleTextColor="@color/white"
+            app:contentScrim="?colorPrimary"/>
 
     </com.google.android.material.appbar.AppBarLayout>
 

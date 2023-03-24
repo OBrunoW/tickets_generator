@@ -1,7 +1,6 @@
 package com.example.camaleovendas.printer;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 
 import java.util.HashMap;
 import java.util.Map;

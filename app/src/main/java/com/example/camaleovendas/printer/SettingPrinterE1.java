@@ -1,11 +1,15 @@
 package com.example.camaleovendas.printer;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.util.Log;
 
+import androidx.preference.PreferenceManager;
+
 import com.elgin.e1.Impressora.Etiqueta;
 import com.elgin.e1.Impressora.Termica;
+import com.example.camaleovendas.R;
 
 import java.util.Map;
 import java.util.Objects;
@@ -19,16 +23,18 @@ public class SettingPrinterE1 {
     public static final String TYPE_USB = "usb";
     public static final String IP_GERTEC = "192.168.0.32";
     public static final String IP_I9 = "192.168.0.33";
+    private SharedPreferences connectionPrinter;
 
 
     public Context _context;
     public SettingPrinterE1(Context context) {
         this._context = context;
+        this.connectionPrinter = PreferenceManager.getDefaultSharedPreferences(context);;
         Termica.setContext(context);
     }
     public int connectPrinter() {
         try {
-            return Termica.AbreConexaoImpressora(IP, MODEL_PRINTER_I9, IP_GERTEC, 9100);
+            return Termica.AbreConexaoImpressora(Integer.parseInt(connectionPrinter.getString("connection", "3")), MODEL_PRINTER_I9, IP_GERTEC, 9100);
         } catch (Exception e) {
             return -1;
         }

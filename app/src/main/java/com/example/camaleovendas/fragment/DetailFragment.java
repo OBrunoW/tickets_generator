@@ -38,7 +38,6 @@ public class DetailFragment extends Fragment {
         assert mainActivity != null;
 
         Objects.requireNonNull(mainActivity.getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
-        mainActivity.getSupportActionBar().setDisplayShowTitleEnabled(true);
         mainActivity.getSupportActionBar().setHomeAsUpIndicator(R.drawable.round_arrow_back_ios_24);
         mainActivity.getSupportActionBar().setTitle("Relatório de vendas");
 

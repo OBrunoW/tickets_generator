@@ -19,14 +19,15 @@
                 android:layout_height="wrap_content"
                 android:layout_columnWeight="1"
                 android:layout_marginStart="4dp"
-                android:layout_marginTop="36dp"
+                android:layout_marginTop="4dp"
                 android:layout_marginEnd="4dp">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/dialog_custom_layout_name_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Nome do Produto"
+                    android:hint="Nome do Produto (Max 10 letras)"
+                    android:maxLength="10"
                     android:inputType="textAutoCorrect" />
 
             </com.google.android.material.textfield.TextInputLayout>

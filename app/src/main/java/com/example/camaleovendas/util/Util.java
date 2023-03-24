@@ -5,6 +5,8 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 
 import java.io.ByteArrayOutputStream;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Locale;
 
 public class Util {
@@ -55,6 +57,34 @@ public class Util {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public static Bitmap replaceColor(Bitmap src) {
+        if (src == null)
+            return null;
+        int width = src.getWidth();
+        int height = src.getHeight();
+        int[] pixels = new int[width * height];
+        src.getPixels(pixels, 0, 1 * width, 0, 0, width, height);
+        for (int x = 0; x < pixels.length; ++x) {
+            //    pixels[x] = ~(pixels[x] << 8 & 0xFF000000) & Color.BLACK;
+            if (pixels[x] == Color.WHITE) pixels[x] = 0;
+        }
+        return Bitmap.createBitmap(pixels, width, height, Bitmap.Config.ARGB_8888);
+    }
+
+    public static SimpleDateFormat setDateTimeFormat(String pattern) {
+        return new SimpleDateFormat(pattern);
+    }
+
+    public static String getDateTimeNow() {
+        String patternDate = "dd/MM/yyyy HH:mm:ss";
+        try {
+            Calendar calendar = Calendar.getInstance();
+            return setDateTimeFormat(patternDate).format(calendar.getTime());
+        } catch (Exception ignored) {
+        }
+        return "00/00/00000";
     }
 
 }
