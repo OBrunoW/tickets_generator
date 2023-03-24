@@ -8,8 +8,10 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.example.camaleovendas.datamodel.ConsolidatedDataModel;
+import com.example.camaleovendas.datamodel.EventDataModel;
 import com.example.camaleovendas.datamodel.ProductDataModel;
 import com.example.camaleovendas.model.Consolidated;
+import com.example.camaleovendas.model.Event;
 import com.example.camaleovendas.model.Product;
 
 import java.util.ArrayList;
@@ -35,12 +37,17 @@ public class DataSource extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
 
         try {
+            db.execSQL(EventDataModel.createTable());
+        } catch (Exception ignored) {}
+
+        try {
             db.execSQL(ProductDataModel.createTable());
         } catch (Exception ignored) {}
 
         try {
             db.execSQL(ConsolidatedDataModel.createTable());
         } catch (Exception ignored) {}
+
     }
 
     @Override
@@ -230,6 +237,82 @@ public class DataSource extends SQLiteOpenHelper {
         return objProduct;
     }
 
+    public Event getEvent(int id) {
+
+        Event objEvent = new Event();
+
+        db = this.getReadableDatabase();
+
+        String sql = "SELECT * FROM " + EventDataModel.getTable()
+                + " WHERE id = ?";
+
+        cursor = db.rawQuery(sql, new String[]{String.valueOf(id)});
+
+        if (cursor.moveToFirst()) {
+
+            do {
+
+                objEvent.setId(cursor.getInt(Integer.parseInt(String.valueOf
+                        (cursor.getColumnIndex(ProductDataModel.getId())))));
+
+                objEvent.setName(cursor.getString(Integer.parseInt(String.valueOf
+                        (cursor.getColumnIndex(EventDataModel.getName())))));
+
+                objEvent.setImage(cursor.getBlob(Integer.parseInt(String.valueOf
+                        (cursor.getColumnIndex(EventDataModel.getImage())))));
+
+            } while (cursor.moveToNext());
+
+        }
+
+        cursor.close();
+
+        db.close();
+
+        return objEvent;
+    }
+
+    public List<Event> getEvent() {
+
+        List<Event> values = new ArrayList<>();
+        Event objEvent;
+
+        db = this.getReadableDatabase();
+
+        String sql = "SELECT * FROM " + EventDataModel.getTable()
+                + " Order by "
+                + EventDataModel.getId();
+
+        cursor = db.rawQuery(sql, null);
+
+        if (cursor.moveToFirst()) {
+
+            do {
+
+                objEvent = new Event();
+
+                objEvent.setId(cursor.getInt(Integer.parseInt(String.valueOf
+                        (cursor.getColumnIndex(ProductDataModel.getId())))));
+
+                objEvent.setName(cursor.getString(Integer.parseInt(String.valueOf
+                        (cursor.getColumnIndex(EventDataModel.getName())))));
+
+                objEvent.setImage(cursor.getBlob(Integer.parseInt(String.valueOf
+                        (cursor.getColumnIndex(EventDataModel.getImage())))));
+
+                values.add(objEvent);
+
+            } while (cursor.moveToNext());
+
+        }
+
+        cursor.close();
+
+        db.close();
+
+        return values;
+    }
+
     public List<Consolidated> getConsolidateds() {
 
         Consolidated objProduct;
@@ -244,56 +327,6 @@ public class DataSource extends SQLiteOpenHelper {
                 + " COLLATE NOCASE DESC";
 
         cursor = db.rawQuery(sql, null);
-
-        if (cursor.moveToFirst()) {
-
-            do {
-
-                objProduct = new Consolidated();
-
-                objProduct.setId(cursor.getInt(Integer.parseInt(String.valueOf
-                        (cursor.getColumnIndex(ConsolidatedDataModel.getId())))));
-
-                objProduct.setAmount(cursor.getInt(Integer.parseInt(String.valueOf
-                        (cursor.getColumnIndex(ConsolidatedDataModel.getAmount())))));
-
-                objProduct.setName(cursor.getString(Integer.parseInt(String.valueOf
-                        (cursor.getColumnIndex(ConsolidatedDataModel.getName())))));
-
-                objProduct.setPrice(cursor.getDouble(Integer.parseInt(String.valueOf
-                        (cursor.getColumnIndex(ConsolidatedDataModel.getPrice())))));
-
-                objProduct.setPg(cursor.getString(Integer.parseInt(String.valueOf
-                        (cursor.getColumnIndex(ConsolidatedDataModel.getPg())))));
-
-                objProduct.setDateTime(cursor.getString(Integer.parseInt(String.valueOf
-                        (cursor.getColumnIndex(ConsolidatedDataModel.getDateTime())))));
-
-                retorno.add(objProduct);
-
-            } while (cursor.moveToNext());
-
-        }
-
-        cursor.close();
-
-        db.close();
-
-        return retorno;
-    }
-
-    public List<Consolidated> getConsolidatedsByName(String name) {
-
-        Consolidated objProduct;
-
-        db = this.getReadableDatabase();
-
-        List<Consolidated> retorno = new ArrayList<>();
-
-        String sql = "SELECT * FROM " + ConsolidatedDataModel.getTable()
-                + " WHERE name = ?";
-
-        cursor = db.rawQuery(sql, new String[]{name});
 
         if (cursor.moveToFirst()) {
 

@@ -32,6 +32,7 @@ import com.example.camaleovendas.R;
 import com.example.camaleovendas.adapter.ConsolidatedAdapterList;
 import com.example.camaleovendas.adapter.ProductAdapterList;
 import com.example.camaleovendas.controller.ConsolidatedController;
+import com.example.camaleovendas.controller.EventController;
 import com.example.camaleovendas.controller.ProductController;
 import com.example.camaleovendas.model.Consolidated;
 import com.example.camaleovendas.model.Product;
@@ -77,6 +78,7 @@ public class SaleProductFragment extends Fragment {
         Objects.requireNonNull(mainActivity.getSupportActionBar()).setTitle("Camaleões vendas");
         mainActivity.getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         mainActivity.getSupportActionBar().setElevation(0);
+        mainActivity.getSupportActionBar().show();
 
         ProductController productController = new ProductController(getContext());
         products = productController.getAll();
@@ -173,6 +175,7 @@ public class SaleProductFragment extends Fragment {
 
             if(stateName && statePrice) {
                 Product product = new Product();
+                product.setIdEvent(1);
                 product.setName(name.getText().toString());
                 product.setPrice(Double.parseDouble(price.getText().toString()));
                 product.setAmount(0);
@@ -321,6 +324,16 @@ public class SaleProductFragment extends Fragment {
                 yPos += 125;
 
                 mCanvasDraw.drawText(obj.getName(), xPos, yPos, paint);
+
+                xPos = 500;
+                yPos = -36;
+
+                Bitmap bitmap = Util.getImage(new EventController(getContext()).getEvent(1).getImage());
+
+                if(bitmap != null) {
+                    Bitmap mBitmap = Util.setImageSizeColor(bitmap, 300, 300);
+                    mCanvasDraw.drawBitmap(Util.replaceColor(mBitmap), xPos, yPos, paint);
+                }
 
                 //xPos = getRight() - 250;
                 //yPos = 0;

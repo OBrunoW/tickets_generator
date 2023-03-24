@@ -23,5 +23,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         mainActivity.getSupportActionBar().setHomeAsUpIndicator(R.drawable.round_arrow_back_ios_24);
         mainActivity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mainActivity.getSupportActionBar().setElevation(0);
+        mainActivity.getSupportActionBar().show();
     }
 }

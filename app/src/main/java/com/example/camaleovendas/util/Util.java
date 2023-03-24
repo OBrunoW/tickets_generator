@@ -73,6 +73,18 @@ public class Util {
         return Bitmap.createBitmap(pixels, width, height, Bitmap.Config.ARGB_8888);
     }
 
+    public static byte[] getBytes(Bitmap bitmap) {
+        if (bitmap == null) return null;
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+        return stream.toByteArray();
+    }
+
+    public static Bitmap getImage(byte[] image) {
+        if (image == null) return null;
+        return BitmapFactory.decodeByteArray(image, 0, image.length);
+    }
+
     public static SimpleDateFormat setDateTimeFormat(String pattern) {
         return new SimpleDateFormat(pattern);
     }

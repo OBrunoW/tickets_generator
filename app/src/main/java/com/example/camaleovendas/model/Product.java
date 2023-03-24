@@ -3,6 +3,7 @@ package com.example.camaleovendas.model;
 public class Product {
 
     int id;
+    int idEvent;
     int amount;
     String name;
     double price;
@@ -13,6 +14,14 @@ public class Product {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public int getIdEvent() {
+        return idEvent;
+    }
+
+    public void setIdEvent(int idEvent) {
+        this.idEvent = idEvent;
     }
 
     public int getAmount() {

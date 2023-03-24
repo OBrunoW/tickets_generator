@@ -57,6 +57,7 @@ public class ConsolidatedFragment extends Fragment {
         mainActivity.getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         mainActivity.getSupportActionBar().setDisplayShowTitleEnabled(true);
         mainActivity.getSupportActionBar().setElevation(0);
+        mainActivity.getSupportActionBar().show();
 
         ProductController productController = new ProductController(getContext());
         products = productController.getAll();

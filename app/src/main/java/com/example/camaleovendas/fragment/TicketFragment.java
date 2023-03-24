@@ -38,8 +38,10 @@ import com.example.camaleovendas.R;
 import com.example.camaleovendas.adapter.ConsolidatedAdapterList;
 import com.example.camaleovendas.adapter.ProductAdapterList;
 import com.example.camaleovendas.controller.ConsolidatedController;
+import com.example.camaleovendas.controller.EventController;
 import com.example.camaleovendas.controller.ProductController;
 import com.example.camaleovendas.model.Consolidated;
+import com.example.camaleovendas.model.Event;
 import com.example.camaleovendas.model.Product;
 import com.example.camaleovendas.util.Util;
 import com.example.camaleovendas.view.MainActivity;
@@ -59,6 +61,7 @@ public class TicketFragment extends Fragment {
     private Bitmap mBitmapDraw, bitmap;
     private Canvas mCanvasDraw;
     private EditText editName;
+    private ImageView selectImage;
 
     private static final String TAG_FRAGMENT = "fragment_main_menu";
 
@@ -80,6 +83,7 @@ public class TicketFragment extends Fragment {
         Objects.requireNonNull(mainActivity.getSupportActionBar()).setTitle("Camaleões vendas");
         mainActivity.getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         mainActivity.getSupportActionBar().setElevation(0);
+        mainActivity.getSupportActionBar().show();
 
         editName = view.findViewById(R.id.edit_name);
 
@@ -91,6 +95,9 @@ public class TicketFragment extends Fragment {
 
         ImageView selectImage = view.findViewById(R.id.select_image);
         selectImage.setOnClickListener(v -> startGallery());
+
+        List <Event> list = new EventController(getContext()).getEvent();
+        if(list.size() > 0) bitmap = Util.getImage(list.get(0).getImage());
 
         return view;
     }
@@ -123,6 +130,15 @@ public class TicketFragment extends Fragment {
 
     private void setBitmap(Bitmap bitmapFileSelected) {
         bitmap = bitmapFileSelected;
+        EventController controller = new EventController(getContext());
+        Event event = new Event();
+        event.setName(null);
+        event.setImage(Util.getBytes(bitmap));
+
+        if(controller.getEvent().size() > 0) {
+            event.setId(1);
+            controller.update(event);
+        } else controller.save(event);
     }
 
     private class Preview extends View {

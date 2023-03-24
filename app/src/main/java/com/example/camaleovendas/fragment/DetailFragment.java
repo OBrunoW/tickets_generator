@@ -40,6 +40,7 @@ public class DetailFragment extends Fragment {
         Objects.requireNonNull(mainActivity.getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         mainActivity.getSupportActionBar().setHomeAsUpIndicator(R.drawable.round_arrow_back_ios_24);
         mainActivity.getSupportActionBar().setTitle("Relatório de vendas");
+        mainActivity.getSupportActionBar().show();
 
         ConsolidatedDetailsAdapterList consolidatedDetails
                 = new ConsolidatedDetailsAdapterList(mainActivity);

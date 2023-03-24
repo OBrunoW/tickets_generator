@@ -71,7 +71,6 @@ public class ConsolidatedDetailsAdapterList extends RecyclerView.Adapter<Consoli
         if(product.getName() != null) holder.nameStatus.setVisibility(View.GONE);
         else holder.nameStatus.setVisibility(View.VISIBLE);
 
-
         holder.prodName.setText(name);
 
         for(Consolidated obj : consolidateds) {
