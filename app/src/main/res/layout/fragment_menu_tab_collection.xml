@@ -6,18 +6,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.viewpager.widget.ViewPager
-        xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tab_layout"
-        android:backgroundTint="@color/camaleao_red"
+        android:backgroundTint="@color/night"
         app:tabTextColor="@color/white"
         app:tabTextAppearance="@style/TextAppearance.Material3.BodyLarge"
-        app:tabSelectedTextColor="@color/camaleao_yellow"
-        app:tabIndicatorColor="@color/camaleao_yellow"
+        app:tabSelectedTextColor="@color/icon"
+        app:tabIndicatorColor="@color/icon"
         app:tabIconTint="@color/white"
         app:tabInlineLabel="true"
         app:tabIndicatorAnimationMode="linear"

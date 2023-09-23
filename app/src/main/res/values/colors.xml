@@ -1,18 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="purple_200">#FFBB86FC</color>
-    <color name="purple_500">#FF6200EE</color>
-    <color name="purple_700">#FF3700B3</color>
-    <color name="teal_200">#FF03DAC5</color>
-    <color name="teal_700">#FF018786</color>
+
+    <color name="red">#860c11</color>
+    <color name="yellow">#edc04a</color>
+    <color name="green">#057335</color>
+    <color name="box">#4Da0a0a2</color>
+    <color name="icon">#CCa0a0a2</color>
+    <color name="coil">#fbfbe4</color>
+
+    <color name="day">#EFEFFB</color>
+    <color name="night">#0B0B3B</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="camaleao_red">#860c11</color>
-    <color name="camaleao_yellow">#edc04a</color>
-    <color name="camaleao_green">#057335</color>
-    <color name="color_outlined_box">#4Da0a0a2</color>
-    <color name="color_outlined_icon">#CCa0a0a2</color>
-    <color name="color_coil_termic_printer">#fbfbe4</color>
-
 
 </resources>

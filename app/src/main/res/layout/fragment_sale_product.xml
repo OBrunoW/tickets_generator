@@ -16,7 +16,7 @@
         android:layout_height="match_parent"
         android:layout_marginTop="?attr/actionBarSize"
         android:padding="18dp"
-        android:background="#F3F3F3"/>
+        android:background="@color/day"/>
 
         <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
             android:id="@+id/card_new_product"
@@ -25,7 +25,7 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
             android:layout_margin="16dp"
-            android:backgroundTint="@color/camaleao_green"
+            android:backgroundTint="@color/green"
             android:textColor="@color/white"
             app:icon="@drawable/round_add_24"
             app:iconTint="@color/white" />

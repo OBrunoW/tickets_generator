@@ -75,8 +75,7 @@ public class SaleProductFragment extends Fragment {
 
         assert mainActivity != null;
 
-        Objects.requireNonNull(mainActivity.getSupportActionBar()).setTitle("Camaleões vendas");
-        mainActivity.getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        Objects.requireNonNull(mainActivity.getSupportActionBar()).setDisplayHomeAsUpEnabled(false);
         mainActivity.getSupportActionBar().setElevation(0);
         mainActivity.getSupportActionBar().show();
 
@@ -305,7 +304,7 @@ public class SaleProductFragment extends Fragment {
                 Canvas mCanvasDraw = new Canvas(mBitmapDraw);
 
                 Paint paint = new Paint();
-                paint.setColor(getContext().getColor(R.color.color_coil_termic_printer));
+                paint.setColor(getContext().getColor(R.color.coil));
                 mCanvasDraw.drawPaint(paint);
 
                 paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
@@ -349,8 +348,7 @@ public class SaleProductFragment extends Fragment {
                 settings.cutPaper();
             }
 
-            //e1.printerStopElgin();
-
+            settings.closeConnection();
             dialog.dismiss();
 
         });

@@ -39,9 +39,9 @@ public class MainActivity extends AppCompatActivity {
         fragmentManager = getSupportFragmentManager();
 
         setSupportActionBar(toolbar);
+        Objects.requireNonNull(getSupportActionBar()).setTitle("Prim Price");
 
-        fragmentManager.beginTransaction().replace
-                (R.id.content_fragment, new PinFragment()).commit();
+        fragmentManager.beginTransaction().replace(R.id.content_fragment, new MenuTabCollectionFragment()).commit();
 
     }
 
@@ -63,10 +63,6 @@ public class MainActivity extends AppCompatActivity {
                 (R.id.content_fragment, new SettingsFragment()).addToBackStack(null).commit();
 
         return true;
-    }
-
-    private void pinFragment() {
-
     }
 
 }

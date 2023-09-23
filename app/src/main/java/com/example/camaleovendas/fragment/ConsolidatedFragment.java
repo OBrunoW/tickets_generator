@@ -53,8 +53,7 @@ public class ConsolidatedFragment extends Fragment {
 
         assert mainActivity != null;
 
-        Objects.requireNonNull(mainActivity.getSupportActionBar()).setTitle("Camaleões vendas");
-        mainActivity.getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        Objects.requireNonNull(mainActivity.getSupportActionBar()).setDisplayHomeAsUpEnabled(false);
         mainActivity.getSupportActionBar().setDisplayShowTitleEnabled(true);
         mainActivity.getSupportActionBar().setElevation(0);
         mainActivity.getSupportActionBar().show();

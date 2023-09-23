@@ -9,7 +9,7 @@
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:backgroundTint="@color/camaleao_red"
+        android:backgroundTint="@color/night"
         android:hapticFeedbackEnabled="true">
 
         <com.google.android.material.appbar.MaterialToolbar

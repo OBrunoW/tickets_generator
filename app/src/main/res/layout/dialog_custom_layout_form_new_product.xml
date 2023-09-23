@@ -44,7 +44,7 @@
                     android:text="R$"
                     android:textStyle="bold"
                     android:layout_marginRight="4dp"
-                    android:textColor="@color/camaleao_green"
+                    android:textColor="@color/green"
                     android:textSize="36sp" />
 
             <EditText
@@ -63,7 +63,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="16dp"
-        android:backgroundTint="@color/camaleao_green"
+        android:backgroundTint="@color/green"
         android:text="Salvar"
         android:padding="16dp"/>
 

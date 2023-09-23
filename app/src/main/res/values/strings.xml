@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Camaleão vendas</string>
+    <string name="app_name">Prim Price</string>
     <!-- Preference Titles -->
     <string name="messages_header">Messages</string>
     <string name="sync_header">Sync</string>
